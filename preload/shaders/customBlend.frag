@@ -1,6 +1,7 @@
 #pragma header
 
-uniform sampler2D source;
+uniform sampler2D sourceSwag;
+uniform sampler2D backgroundSwag;
 uniform int blendMode;
 
 const int DARKEN = 2;
@@ -32,13 +33,13 @@ vec3 blend(vec3 bg, vec3 src) {
 	} else if (blendMode == OVERLAY) {
 		return overlay(bg, src);
 	} else {
-		return vec3(1, 0, 1); // not supported
+		return vec3(1, 0, 1);
 	}
 }
 
 void main() {
-	vec4 bg = sampleBitmapScreen(screenCoord);
-	vec4 src = texture2D(source, screenCoord);
-	vec3 res = blend(bg.rgb, src.rgb);
-	gl_FragColor = vec4(mix(bg.rgb, res.rgb, src.a), mix(bg.a, 1.0, src.a));
+	vec4 bg = flixel_texture2D(backgroundSwag, openfl_TextureCoordv);
+	vec4 src = flixel_texture2D(sourceSwag, screenCoord);
+    vec3 res = blend(bg.rgb, src.rgb);
+    gl_FragColor = vec4(mix(bg.rgb, res.rgb, src.a), mix(bg.a, 1.0, src.a));
 }
